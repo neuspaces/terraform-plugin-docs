@@ -11,6 +11,7 @@ type generateCmd struct {
 	commonCmd
 
 	flagLegacySidebar bool
+	tfVersion         string
 
 	flagProviderName         string
 	flagRenderedProviderName string
@@ -32,6 +33,7 @@ func (cmd *generateCmd) Help() string {
 func (cmd *generateCmd) Flags() *flag.FlagSet {
 	fs := flag.NewFlagSet("generate", flag.ExitOnError)
 	fs.BoolVar(&cmd.flagLegacySidebar, "legacy-sidebar", false, "generate the legacy .erb sidebar file")
+	fs.StringVar(&cmd.tfVersion, "tf-version", "", "terraform binary version to download")
 	fs.StringVar(&cmd.flagProviderName, "provider-name", "", "provider name used for looking up the schema")
 	fs.StringVar(&cmd.flagRenderedProviderName, "rendered-provider-name", "", "provider name used in generated outputs such as page titles")
 	fs.StringVar(&cmd.flagRenderedWebsiteDir, "rendered-website-dir", "docs", "directory where the rendered website documentation is generated to")
@@ -56,6 +58,7 @@ func (cmd *generateCmd) runInternal() error {
 	err := provider.Generate(
 		cmd.ui,
 		cmd.flagLegacySidebar,
+		cmd.tfVersion,
 		cmd.flagProviderName,
 		cmd.flagRenderedProviderName,
 		cmd.flagRenderedWebsiteDir,

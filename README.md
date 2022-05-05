@@ -21,6 +21,27 @@ When you run `tfplugindocs` from root directory of the provider the tool takes t
 
 You can see an example of the templates and output in [paultyng/terraform-provider-unifi](https://github.com/paultyng/terraform-provider-unifi) and browse the generated docs in the [Terraform Registry](https://registry.terraform.io/providers/paultyng/unifi/latest/docs).
 
+#### About the `id` attribute
+
+If the provider schema didn't set `id` for the given resource/data-source, the documentation generated
+will place it under the "Read Only" section and provide a simple description.
+
+Otherwise, the provider developer can set an arbitrary description like this:
+
+```golang
+    // ...
+    Schema: map[string]*schema.Schema{
+        // ...
+        "id": {
+            Type:     schema.TypeString,
+            Computed: true,
+            Description: "Unique identifier for this resource",
+		},
+        // ...
+    }
+    // ...
+```
+
 ### Conventional Paths
 
 The generation of missing documentation is based on a number of assumptions / conventional paths:
@@ -54,6 +75,7 @@ TBD
 | `tffile`        | A special case of the `codefile` function. In addition this will elide lines with an `OMIT` comment.               |
 | `trimspace`     | `strings.TrimSpace`                                                                                                |
 | `plainmarkdown` | Render Markdown content as plaintext                                                                               |
+| `split`         | Split string into sub-strings, eg. `split .Name "_"`                                                               |
 
 ### Installation
 
